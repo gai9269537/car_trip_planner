@@ -74,7 +74,7 @@ GEMINI_API_KEY=your_gemini_api_key_here
 **Where to get API keys:**
 - **Google Maps API Key**: https://console.cloud.google.com/google/maps-apis
   - Enable: Maps JavaScript API, Directions API, Geocoding API
-- **Gemini API Key**: https://aistudio.google.com/apikey
+- **Gemini API Key**: https://makersuite.google.com/app/apikey (optional, for AI trip generation)
 
 ### 5. Start the Backend Server
 

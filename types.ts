@@ -1,4 +1,4 @@
-// FIX: Defining all the necessary types for the application.
+// TypeScript type definitions for the application
 
 export interface ActionLink {
     type: 'url' | 'skill';

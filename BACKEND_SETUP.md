@@ -53,7 +53,7 @@ npm run dev
 - ✅ Database persistence for all trip data
 
 ### Frontend
-- ✅ API service module (`src/services/api.ts`)
+- ✅ API service module (`services/api.ts`)
 - ✅ UserContext now uses API for login
 - ✅ App.tsx loads trips from database
 - ✅ NewTripPlanningView calls backend API

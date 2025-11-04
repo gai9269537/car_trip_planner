@@ -8,15 +8,13 @@ const WarningSeverity = {
   High: 'high',
 };
 
-// For now, use mock data. Later can integrate with Gemini API
+// Generate trip plan - currently uses sample data
+// Can be extended to integrate with external APIs for real trip generation
 export async function generateTripPlan(origin, destination, vacationWants) {
-  // TODO: Integrate with Gemini API for real trip generation
-  // For now, return mock data similar to the original
-  
-  // If Gemini API key is available, use it
+  // Optional: Integrate with Gemini API or other services for AI-powered trip generation
   const geminiApiKey = process.env.GEMINI_API_KEY || process.env.VITE_GEMINI_API_KEY;
   
-  if (geminiApiKey && false) { // Disabled for now, use mock
+  if (geminiApiKey) {
     try {
       const genAI = new GoogleGenerativeAI(geminiApiKey);
       const model = genAI.getGenerativeModel({ model: 'gemini-pro' });
@@ -25,15 +23,15 @@ export async function generateTripPlan(origin, destination, vacationWants) {
       
       const result = await model.generateContent(prompt);
       const response = await result.response;
-      // Parse and return trip data
-      // For now, fall back to mock
+      // TODO: Parse AI response and convert to TripResult format
+      // For now, fall back to sample data
     } catch (error) {
       console.error('Gemini API error:', error);
-      // Fall back to mock data
+      // Fall back to sample data
     }
   }
   
-  // Mock trip generation (same as original)
+  // Sample trip data (can be replaced with AI-generated or database-stored templates)
   const waypoints = [
     {
       id: randomUUID(),

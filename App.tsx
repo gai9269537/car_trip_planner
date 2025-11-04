@@ -1,4 +1,4 @@
-// FIX: Implementing the main App component to handle application state and view routing.
+// Main App component - handles application state and view routing
 import React, { useState, useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import type { Attraction, Hotel, TripResult, Waypoint, Deal, User, ActionLink, Trip } from './types';
@@ -28,7 +28,6 @@ type View =
     | { name: 'hotels'; waypoint: Waypoint }
     | { name: 'expertHelp'; hotel: Hotel }
     | { name: 'settings' }
-    // FIX: Add 'login' to the View type to allow setting the view state to 'login' upon logout.
     | { name: 'login' }
     | { name: 'tripDetail'; trip: Trip };
 
