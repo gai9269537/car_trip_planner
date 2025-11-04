@@ -18,7 +18,7 @@ export const Header: React.FC<HeaderProps> = ({ user, onLogout, onSettingsClick,
             className="flex items-center space-x-2 text-xl font-bold text-brand-blue hover:text-brand-purple transition-colors"
           >
             <span>🗺️</span>
-            <span>Trip Planner</span>
+            <span>Car Trip Planner</span>
           </button>
           
           <div className="flex items-center space-x-4">

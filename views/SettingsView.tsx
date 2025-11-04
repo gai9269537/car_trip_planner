@@ -66,7 +66,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({ onBack }) => {
           <div>
             <h2 className="text-xl font-semibold text-gray-900 mb-4">About</h2>
             <p className="text-gray-600">
-              Trip Planner v1.0.0
+              Car Trip Planner v1.0.0
             </p>
             <p className="text-sm text-gray-500 mt-2">
               Plan your perfect road trip with AI-powered recommendations.

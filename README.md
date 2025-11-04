@@ -1,4 +1,4 @@
-# AI Trip Planner
+# Car Trip Planner
 
 A React-based car trip planning application with AI-powered trip generation.
 
@@ -7,7 +7,7 @@ A React-based car trip planning application with AI-powered trip generation.
 - **Node.js** (v18 or higher recommended)
 - **npm** or **yarn**
 - **Google Maps API Key** (for map functionality)
-- **Google Gemini API Key** (for AI trip planning)
+- **Google Gemini API Key** (for Car Trip planning)
 
 ## Setup Instructions for macOS
 

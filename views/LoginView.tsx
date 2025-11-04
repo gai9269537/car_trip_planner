@@ -20,7 +20,7 @@ export const LoginView: React.FC<LoginViewProps> = ({ onLogin }) => {
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-brand-blue to-brand-purple">
       <div className="bg-white rounded-lg shadow-xl p-8 w-full max-w-md">
         <h1 className="text-3xl font-bold text-center mb-6 text-gray-800">
-          🗺️ Trip Planner
+          🗺️ Car Trip Planner
         </h1>
         <p className="text-center text-gray-600 mb-8">
           Sign in to start planning your next adventure
