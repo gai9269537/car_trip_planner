@@ -1,0 +1,5 @@
+{
+  "name": "AI Trip Planner",
+  "description": "A React application that helps users plan tailored road trips across the USA. Users can select a travel profile, describe their vacation wants, and receive a custom itinerary with waypoints, attractions, and important warnings.",
+  "requestFramePermissions": []
+}
