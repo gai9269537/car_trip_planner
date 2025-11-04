@@ -25,7 +25,7 @@ const loadGoogleMapsScript = () => {
   }
 
   const script = document.createElement('script');
-  script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}`;
+  script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places,directions`;
   script.async = true;
   script.onload = () => {
     // Dispatch a custom event to notify components that the API is ready

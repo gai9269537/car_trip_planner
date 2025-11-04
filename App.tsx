@@ -1,8 +1,8 @@
 // FIX: Implementing the main App component to handle application state and view routing.
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import type { Attraction, Hotel, TripResult, Waypoint, Deal, User, ActionLink, Trip } from './types';
-import { UserContext } from './contexts/UserContext';
+import { useContext } from './contexts/UserContext';
 
 import { HomeView } from './views/HomeView';
 import { NewTripPlanningView } from './components/NewTripPlanningView';
@@ -35,7 +35,7 @@ type View =
 const App: React.FC = () => {
     const [viewStack, setViewStack] = useState<View[]>([{ name: 'home' }]);
     const [upcomingTrips, setUpcomingTrips] = useState<Trip[]>(UPCOMING_TRIPS);
-    const { user, login, logout } = useContext(UserContext);
+    const { user, login, logout } = useContext();
 
     const currentView = viewStack[viewStack.length - 1];
 
