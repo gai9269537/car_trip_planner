@@ -327,6 +327,16 @@ This project is open source and available under the MIT License.
 
 Contributions are welcome! Please feel free to submit a Pull Request.
 
+## 📝 Editing Data
+
+For detailed instructions on how to edit application data (trips, waypoints, attractions, hotels, etc.), see [DATA_EDITING_GUIDE.md](DATA_EDITING_GUIDE.md).
+
+Quick reference:
+- **Database**: Direct SQL editing via `sqlite3 server/database/trips.db`
+- **Trip Generation**: Edit `server/services/tripGenerator.js`
+- **Sample Profiles**: Edit `constants.ts`
+- **API**: Use REST endpoints to programmatically modify data
+
 ## 📧 Support
 
 For issues and questions, please open an issue on the GitHub repository.
