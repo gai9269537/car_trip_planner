@@ -1,17 +1,19 @@
 import React, { useState } from 'react';
 import type { TripResult } from '../types';
-import { generateMockTripResult } from '../constants';
+import { apiService } from '../services/api';
 
 interface NewTripPlanningViewProps {
+  userId: string;
   onTripGenerated: (trip: TripResult) => void;
   onBack: () => void;
 }
 
-export const NewTripPlanningView: React.FC<NewTripPlanningViewProps> = ({ onTripGenerated, onBack }) => {
+export const NewTripPlanningView: React.FC<NewTripPlanningViewProps> = ({ userId, onTripGenerated, onBack }) => {
   const [origin, setOrigin] = useState('');
   const [destination, setDestination] = useState('');
   const [vacationWants, setVacationWants] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -21,12 +23,17 @@ export const NewTripPlanningView: React.FC<NewTripPlanningViewProps> = ({ onTrip
     }
 
     setIsLoading(true);
-    // Simulate API call delay
-    setTimeout(() => {
-      const tripResult = generateMockTripResult(origin, destination, vacationWants);
+    setError(null);
+    
+    try {
+      const tripResult = await apiService.generateTrip(userId, origin, destination, vacationWants);
       onTripGenerated(tripResult);
+    } catch (err) {
+      console.error('Failed to generate trip:', err);
+      setError(err instanceof Error ? err.message : 'Failed to generate trip. Please try again.');
+    } finally {
       setIsLoading(false);
-    }, 1000);
+    }
   };
 
   return (
@@ -87,6 +94,12 @@ export const NewTripPlanningView: React.FC<NewTripPlanningViewProps> = ({ onTrip
             />
           </div>
 
+          {error && (
+            <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-md">
+              {error}
+            </div>
+          )}
+          
           <button
             type="submit"
             disabled={isLoading}

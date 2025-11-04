@@ -2,17 +2,31 @@ import React, { useState } from 'react';
 import type { User } from '../types';
 
 interface LoginViewProps {
-  onLogin: (user: User) => void;
+  onLogin: (name: string, email: string) => Promise<void>;
 }
 
 export const LoginView: React.FC<LoginViewProps> = ({ onLogin }) => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (name && email) {
-      onLogin({ name, email });
+    if (!name || !email) {
+      setError('Please fill in both name and email');
+      return;
+    }
+
+    setIsLoading(true);
+    setError(null);
+    
+    try {
+      await onLogin(name, email);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to login. Please try again.');
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -54,11 +68,18 @@ export const LoginView: React.FC<LoginViewProps> = ({ onLogin }) => {
               required
             />
           </div>
+          {error && (
+            <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-md text-sm">
+              {error}
+            </div>
+          )}
+          
           <button
             type="submit"
-            className="w-full bg-brand-blue text-white py-2 px-4 rounded-md hover:bg-brand-purple transition-colors font-medium"
+            disabled={isLoading}
+            className="w-full bg-brand-blue text-white py-2 px-4 rounded-md hover:bg-brand-purple transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            Sign In
+            {isLoading ? 'Signing in...' : 'Sign In'}
           </button>
         </form>
       </div>

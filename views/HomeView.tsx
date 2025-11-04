@@ -5,9 +5,10 @@ interface HomeViewProps {
   onNewTripClick: () => void;
   onTripClick: (trip: Trip) => void;
   upcomingTrips: Trip[];
+  loading?: boolean;
 }
 
-export const HomeView: React.FC<HomeViewProps> = ({ onNewTripClick, onTripClick, upcomingTrips }) => {
+export const HomeView: React.FC<HomeViewProps> = ({ onNewTripClick, onTripClick, upcomingTrips, loading = false }) => {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <div className="text-center mb-12">
@@ -25,7 +26,12 @@ export const HomeView: React.FC<HomeViewProps> = ({ onNewTripClick, onTripClick,
         </button>
       </div>
 
-      {upcomingTrips.length > 0 && (
+      {loading ? (
+        <div className="mt-12 text-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-brand-blue mx-auto mb-2"></div>
+          <p className="text-gray-600">Loading trips...</p>
+        </div>
+      ) : upcomingTrips.length > 0 ? (
         <div className="mt-12">
           <h2 className="text-2xl font-bold text-gray-900 mb-6">Upcoming Trips</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -52,6 +58,10 @@ export const HomeView: React.FC<HomeViewProps> = ({ onNewTripClick, onTripClick,
               </div>
             ))}
           </div>
+        </div>
+      ) : (
+        <div className="mt-12 text-center text-gray-500">
+          <p>No trips yet. Create your first trip to get started!</p>
         </div>
       )}
     </div>

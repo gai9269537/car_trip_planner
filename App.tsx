@@ -1,8 +1,9 @@
 // FIX: Implementing the main App component to handle application state and view routing.
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import type { Attraction, Hotel, TripResult, Waypoint, Deal, User, ActionLink, Trip } from './types';
 import { useContext } from './contexts/UserContext';
+import { apiService } from './services/api';
 
 import { HomeView } from './views/HomeView';
 import { NewTripPlanningView } from './components/NewTripPlanningView';
@@ -16,7 +17,6 @@ import { LoginView } from './views/LoginView';
 import { SettingsView } from './views/SettingsView';
 import { Header } from './components/Header';
 import { TripDetailView } from './views/TripDetailView';
-import { UPCOMING_TRIPS } from './constants';
 
 type View =
     | { name: 'home' }
@@ -34,10 +34,31 @@ type View =
 
 const App: React.FC = () => {
     const [viewStack, setViewStack] = useState<View[]>([{ name: 'home' }]);
-    const [upcomingTrips, setUpcomingTrips] = useState<Trip[]>(UPCOMING_TRIPS);
+    const [upcomingTrips, setUpcomingTrips] = useState<Trip[]>([]);
+    const [loadingTrips, setLoadingTrips] = useState(false);
     const { user, login, logout } = useContext();
 
     const currentView = viewStack[viewStack.length - 1];
+
+    // Load trips when user is logged in
+    useEffect(() => {
+        if (user) {
+            loadTrips();
+        }
+    }, [user]);
+
+    const loadTrips = async () => {
+        if (!user?.id) return;
+        setLoadingTrips(true);
+        try {
+            const trips = await apiService.getTrips(user.id);
+            setUpcomingTrips(trips);
+        } catch (error) {
+            console.error('Failed to load trips:', error);
+        } finally {
+            setLoadingTrips(false);
+        }
+    };
 
     const navigate = (newView: View) => {
         setViewStack(prev => [...prev, newView]);
@@ -47,9 +68,14 @@ const App: React.FC = () => {
         setViewStack(prev => prev.length > 1 ? prev.slice(0, -1) : prev);
     };
 
-    const handleLogin = (mockUser: User) => {
-        login(mockUser);
-        setViewStack([{ name: 'home' }]);
+    const handleLogin = async (name: string, email: string) => {
+        try {
+            await login(name, email);
+            setViewStack([{ name: 'home' }]);
+        } catch (error) {
+            console.error('Login failed:', error);
+            alert('Failed to login. Please try again.');
+        }
     };
     
     const handleLogout = () => {
@@ -62,16 +88,24 @@ const App: React.FC = () => {
         alert(`Demo skill triggered: ${action.target}`);
     };
     
-    const handleSaveTrip = (tripResult: TripResult) => {
-        const newTrip: Trip = {
-            id: uuidv4(),
-            name: `${tripResult.origin} to ${tripResult.destination}`,
-            dates: 'Dates TBD',
-            plannedProgress: 1.0,
-            iconName: 'map',
-        };
-        setUpcomingTrips(prev => [newTrip, ...prev]);
-        navigate({ name: 'tripDetail', trip: newTrip });
+    const handleSaveTrip = async (tripResult: TripResult) => {
+        if (!user?.id) return;
+        
+        try {
+            await apiService.saveTrip(user.id, tripResult);
+            const newTrip: Trip = {
+                id: tripResult.id || uuidv4(),
+                name: `${tripResult.origin} to ${tripResult.destination}`,
+                dates: 'Dates TBD',
+                plannedProgress: 1.0,
+                iconName: 'map',
+            };
+            setUpcomingTrips(prev => [newTrip, ...prev]);
+            navigate({ name: 'tripDetail', trip: newTrip });
+        } catch (error) {
+            console.error('Failed to save trip:', error);
+            alert('Failed to save trip. Please try again.');
+        }
     };
 
     if (!user) {
@@ -85,9 +119,17 @@ const App: React.FC = () => {
                     onNewTripClick={() => navigate({ name: 'newTrip' })}
                     onTripClick={(trip) => navigate({ name: 'tripDetail', trip })}
                     upcomingTrips={upcomingTrips}
+                    loading={loadingTrips}
                 />;
             case 'newTrip':
-                return <NewTripPlanningView onTripGenerated={(trip) => navigate({ name: 'tripResults', tripResult: trip })} onBack={goBack} />;
+                return <NewTripPlanningView 
+                    userId={user.id} 
+                    onTripGenerated={(trip) => {
+                        loadTrips(); // Refresh trips list
+                        navigate({ name: 'tripResults', tripResult: trip });
+                    }} 
+                    onBack={goBack} 
+                />;
             case 'tripResults':
                 return <TripResultsView
                     tripResult={currentView.tripResult}
